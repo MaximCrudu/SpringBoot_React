@@ -4,14 +4,17 @@ import {
     Layout,
     Menu,
     Breadcrumb,
-    Table
-}   from 'antd';
+    Table,
+    Spin,
+    Empty
+} from 'antd';
 import {
     DesktopOutlined,
     PieChartOutlined,
     FileOutlined,
     TeamOutlined,
     UserOutlined,
+    LoadingOutlined
 } from '@ant-design/icons';
 
 import './App.css';
@@ -42,11 +45,12 @@ const columns = [
     },
 ];
 
-
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 function App() {
     const [students, setStudents] = useState([]);
-    const [collapsed, setCollapsed] = useState(false)
+    const [collapsed, setCollapsed] = useState(false);
+    const [fetching, setFetching] = useState(true);
 
     const fetchStudents = () =>
         getAllStudents()
@@ -54,6 +58,7 @@ function App() {
             .then(data => {
                 console.log(data);
                 setStudents(data);
+                setFetching(false);
             })
 
     useEffect(() => {
@@ -62,15 +67,21 @@ function App() {
     }, []); // zero dependencies
 
     const renderStudents = () => {
-        if (students.length <= 0) {
-            return "No data available"
+        if (fetching){
+            // Show load icon while there is fetching our data
+            return <Spin indicator={antIcon} />;
         }
-        return <Table dataSource={students} columns={columns}
-                      rowKey={student => student.id}/>;
-    }
-
-    if (students.length <= 0) {
-        return "no data";
+        if (students.length <= 0) {
+            return <Empty />;
+        }
+        return <Table dataSource={students}
+                      columns={columns}
+                      bordered
+                      title={() => 'Students'}
+                      pagination={{ pageSize: 50 }}
+                      scroll={{ y: 240 }}
+                      rowKey={student => student.id}
+        />;
     }
 
     return <Layout style={{ minHeight: '100vh' }}>
@@ -109,7 +120,7 @@ function App() {
                     {renderStudents()}
                 </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+            <Footer style={{ textAlign: 'center' }}>By Maxim ©2023</Footer>
         </Layout>
     </Layout>
 }
