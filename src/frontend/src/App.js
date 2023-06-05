@@ -19,6 +19,8 @@ import {
     DownloadOutlined, PlusOutlined
 } from '@ant-design/icons';
 
+import StudentDrawerForm from "./StudentDrawerForm";
+
 import './App.css';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -53,6 +55,7 @@ function App() {
     const [students, setStudents] = useState([]);
     const [collapsed, setCollapsed] = useState(false);
     const [fetching, setFetching] = useState(true);
+    const [showDrawer, setShowDrawer] = useState(false);
 
     const fetchStudents = () =>
         getAllStudents()
@@ -76,17 +79,25 @@ function App() {
         if (students.length <= 0) {
             return <Empty />;
         }
-        return <Table dataSource={students}
+        return <>
+            <StudentDrawerForm
+                showDrawer={showDrawer}
+                setShowDrawer={setShowDrawer}
+            />
+        <Table dataSource={students}
                       columns={columns}
                       bordered
                       title={() =>
-                          <Button type="primary" shape="round" icon={<PlusOutlined />} size={"small"}>
+                          <Button
+                              onClick={() => setShowDrawer(!showDrawer)}
+                              type="primary" shape="round" icon={<PlusOutlined />} size={"small"}>
                               Add New Student
                           </Button>}
                       pagination={{ pageSize: 50 }}
                       scroll={{ y: 550 }}
                       rowKey={student => student.id}
         />;
+        </>
     }
 
     return <Layout style={{ minHeight: '100vh' }}>
