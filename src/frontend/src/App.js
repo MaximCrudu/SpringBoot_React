@@ -6,7 +6,8 @@ import {
     Breadcrumb,
     Table,
     Spin,
-    Empty
+    Empty,
+    Button
 } from 'antd';
 import {
     DesktopOutlined,
@@ -14,7 +15,8 @@ import {
     FileOutlined,
     TeamOutlined,
     UserOutlined,
-    LoadingOutlined
+    LoadingOutlined,
+    DownloadOutlined, PlusOutlined
 } from '@ant-design/icons';
 
 import './App.css';
@@ -77,7 +79,10 @@ function App() {
         return <Table dataSource={students}
                       columns={columns}
                       bordered
-                      title={() => 'Students'}
+                      title={() =>
+                          <Button type="primary" shape="round" icon={<PlusOutlined />} size={"small"}>
+                              Add New Student
+                          </Button>}
                       pagination={{ pageSize: 50 }}
                       scroll={{ y: 550 }}
                       rowKey={student => student.id}
