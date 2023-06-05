@@ -16,7 +16,7 @@ import {
     TeamOutlined,
     UserOutlined,
     LoadingOutlined,
-    DownloadOutlined, PlusOutlined
+    PlusOutlined
 } from '@ant-design/icons';
 
 import StudentDrawerForm from "./StudentDrawerForm";
