@@ -7,7 +7,7 @@ import {
     Table,
     Spin,
     Empty,
-    Button, Tag, Badge
+    Button, Tag, Badge, Avatar
 } from 'antd';
 import {
     DesktopOutlined,
@@ -26,7 +26,29 @@ import './App.css';
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
+const TheAvatar = ({name}) => {
+    let trim = name.trim();
+    if (trim.length === 0) {
+        return <Avatar icon={<UserOutlined/>}/>;
+    }
+    const split = trim.split(" ");
+    if (split.length === 1) { // if only one word, we will have avatar with only one letter
+        return <Avatar>{name.charAt(0)}</Avatar>
+    }
+    return <Avatar>
+        {`${name.charAt(0)}${name.charAt(name.length-1)}`}
+    </Avatar>
+
+}
+
 const columns = [
+    {
+        title: '',
+        dataIndex: 'avatar',
+        key: 'avatar',
+        render: (text, student) =>
+            <TheAvatar name={student.name}/>
+    },
     {
         title: 'Id',
         dataIndex: 'id',
