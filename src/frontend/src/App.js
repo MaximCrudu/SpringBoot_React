@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getAllStudents } from "./client";
+import { getAllStudents, deleteStudent } from "./client";
 import {
     Layout,
     Menu,
@@ -7,7 +7,7 @@ import {
     Table,
     Spin,
     Empty,
-    Button, Tag, Badge, Avatar
+    Button, Tag, Badge, Avatar, Radio, Popconfirm,
 } from 'antd';
 import {
     DesktopOutlined,
@@ -22,6 +22,7 @@ import {
 import StudentDrawerForm from "./StudentDrawerForm";
 
 import './App.css';
+import {successNotification} from "./Notification";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -41,7 +42,37 @@ const TheAvatar = ({name}) => {
 
 }
 
-const columns = [
+const DeleteButton = (student, callback) => {
+    const removeStudent = (student, callback) => {
+        deleteStudent(student.id).then(() => {
+            successNotification(
+                "Student deleted",
+                `Student ${student.name} with Id: ${student.id} was deleted`
+            );
+            callback();
+        });
+    }
+    return (
+        <Popconfirm
+            placement='topRight'
+            title={`Are you sure to delete ${student.name} from the list?`}
+            description="Confirm to delete a student from the list"
+            onConfirm={() => removeStudent(student, callback)}
+            okText="Yes"
+            cancelText="No"
+        >
+            <Button value="default">Delete</Button>
+        </Popconfirm>
+    );
+}
+
+const EditButton = () => {
+    return (
+        <Radio.Button value="default">Edit</Radio.Button>
+    );
+}
+
+const columns = fetchStudents => [
     {
         title: '',
         dataIndex: 'avatar',
@@ -69,6 +100,13 @@ const columns = [
         dataIndex: 'gender',
         key: 'gender',
     },
+    {
+        title: 'Actions',
+        dataIndex: 'actions',
+        key: 'actions',
+        render: (text, student) =>
+            DeleteButton(student, fetchStudents),
+    }
 ];
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -108,7 +146,7 @@ function App() {
                 fetchStudents={fetchStudents}
             />
             <Table dataSource={students}
-                   columns={columns}
+                   columns={columns(fetchStudents)}
                    bordered
                    title={() =>
                        <>
@@ -122,10 +160,10 @@ function App() {
                            </Button>
                        </>
                    }
-                      pagination={{ pageSize: 50 }}
-                      scroll={{ y: 550 }}
-                      rowKey={student => student.id}
-        />;
+                   pagination={{ pageSize: 50 }}
+                   scroll={{ y: 550 }}
+                   rowKey={student => student.id}
+            />;
         </>
     }
 
