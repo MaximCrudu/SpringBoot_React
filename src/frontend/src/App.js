@@ -42,7 +42,7 @@ const TheAvatar = ({name}) => {
 
 }
 
-const DeleteButton = (student, callback) => {
+const ActionButtons = (student, callback) => {
     const removeStudent = (student, callback) => {
         deleteStudent(student.id).then(() => {
             successNotification(
@@ -61,16 +61,19 @@ const DeleteButton = (student, callback) => {
         })
     }
     return (
-        <Popconfirm
-            placement='topRight'
-            title={`Are you sure to delete ${student.name} from the list?`}
-            description="Confirm to delete a student from the list"
-            onConfirm={() => removeStudent(student, callback)}
-            okText="Yes"
-            cancelText="No"
-        >
-            <Button value="default">Delete</Button>
-        </Popconfirm>
+        <>
+            <Popconfirm
+                placement='topRight'
+                title={`Are you sure to delete ${student.name} from the list?`}
+                description="Confirm to delete a student from the list"
+                onConfirm={() => removeStudent(student, callback)}
+                okText="Yes"
+                cancelText="No"
+            >
+                <Button value="default">Delete</Button>
+            </Popconfirm>
+            <Radio.Button value="default">Edit</Radio.Button>
+        </>
     );
 }
 
@@ -113,7 +116,7 @@ const columns = fetchStudents => [
         dataIndex: 'actions',
         key: 'actions',
         render: (text, student) =>
-            DeleteButton(student, fetchStudents),
+            ActionButtons(student, fetchStudents),
     }
 ];
 
@@ -179,7 +182,7 @@ function App() {
                    pagination={{ pageSize: 50 }}
                    scroll={{ y: 550 }}
                    rowKey={student => student.id}
-            />;
+            />
         </>
     }
 

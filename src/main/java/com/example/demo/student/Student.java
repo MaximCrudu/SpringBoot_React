@@ -7,6 +7,9 @@ package com.example.demo.student;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * lombok from POM permit to use annotations for not specifying
@@ -33,8 +36,11 @@ public class Student {
             generator = "student_sequence",
             strategy = GenerationType.SEQUENCE)
     private Long id;
+    @NotBlank
     private String name;
+    @Email  // can be customized with a regular expression
     private String email;
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
