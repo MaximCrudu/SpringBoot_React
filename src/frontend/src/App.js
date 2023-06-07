@@ -22,7 +22,7 @@ import {
 import StudentDrawerForm from "./StudentDrawerForm";
 
 import './App.css';
-import {successNotification} from "./Notification";
+import {errorNotification, successNotification} from "./Notification";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -50,7 +50,15 @@ const DeleteButton = (student, callback) => {
                 `Student ${student.name} with Id: ${student.id} was deleted`
             );
             callback();
-        });
+        }).catch(err => {
+            err.response.json().then(res => {
+                console.log(res);
+                errorNotification(
+                    "There was an issue",
+                    `${res.message} [${res.status}] [${res.error}]`
+                );
+            });
+        })
     }
     return (
         <Popconfirm
@@ -123,8 +131,16 @@ function App() {
             .then(data => {
                 console.log(data);
                 setStudents(data);
-                setFetching(false);
-            })
+            }).catch(err => {
+                console.log(err.response);
+                err.response.json().then(res => {
+                    console.log(res);
+                    errorNotification(
+                        "There was an issue",
+                        `${res.message} [StatusCode:${res.status}] [${res.error}]`
+                    );
+                });
+        }).finally(() => setFetching(false));
 
     useEffect(() => {
         console.log("component is mounted");

@@ -18,18 +18,25 @@ function StudentDrawerForm({showDrawer, setShowDrawer, fetchStudents}) {
         addNewStudent(student)
             .then(() => {
                 console.log("student added");
-                onCLose()
+                onCLose();
                 successNotification(
                     "Student successfully added",
                     `${student.name} was added to the system`
                 )
-                fetchStudents(); // fetch all students to refresh the page after adding a new one
+                fetchStudents(); // fetch all students to refresh the table after adding a new one
             }).catch(err => {
-                console.log(err)
-            })
-            .finally(() => {
-                setSubmitting(false);
+            console.log(err);
+            err.response.json().then(res => {
+                console.log(res);
+                errorNotification(
+                    "There was an issue",
+                    `${res.message} [${res.status}] [${res.error}]`,
+                    "bottomLeft"
+                )
             });
+        }).finally(() => {
+            setSubmitting(false);
+        })
     };
 
     const onFinishFailed = errorInfo => {
