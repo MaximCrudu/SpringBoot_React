@@ -135,14 +135,14 @@ function App() {
                 console.log(data);
                 setStudents(data);
             }).catch(err => {
-                console.log(err.response);
-                err.response.json().then(res => {
-                    console.log(res);
-                    errorNotification(
-                        "There was an issue",
-                        `${res.message} [StatusCode:${res.status}] [${res.error}]`
-                    );
-                });
+            console.log(err.response);
+            err.response.json().then(res => {
+                console.log(res);
+                errorNotification(
+                    "There was an issue",
+                    `${res.message} [StatusCode:${res.status}] [${res.error}]`
+                );
+            });
         }).finally(() => setFetching(false));
 
     useEffect(() => {
@@ -156,7 +156,19 @@ function App() {
             return <Spin indicator={antIcon} />;
         }
         if (students.length <= 0) {
-            return <Empty />;
+            return <>
+                <Button
+                    onClick={() => setShowDrawer(!showDrawer)}
+                    type="primary" shape="round" icon={<PlusOutlined/>} size="small">
+                    Add New Student
+                </Button>
+                <StudentDrawerForm
+                    showDrawer={showDrawer}
+                    setShowDrawer={setShowDrawer}
+                    fetchStudents={fetchStudents}
+                />
+                <Empty/>
+            </>
         }
         return <>
             <StudentDrawerForm
