@@ -1,36 +1,36 @@
 name: CI
 
 on:
-  pull_request:
+  pull_request: # Will run only on pull requests on main branch
     branches: [ main ]
 
-  workflow_dispatch:
+  workflow_dispatch: # Allow to execute this workflow manually
 
-env:
+env: # Set environment variables
   POSTGRESQL_VERSION: 13.1
-  POSTGRESQL_DB: crudmax
-  POSTGRESQL_USER: postgres
-  POSTGRESQL_PASSWORD: password
+  POSTGRESQL_DB: crudmax # From application.properties file
+  POSTGRESQL_USER: postgres # From application.properties file
+  POSTGRESQL_PASSWORD: password # From application.properties file
   JAVA_VERSION: 1.15
 
 jobs:
-  build:
+  build: # Contains the sequences of steps: (1)setup postgresql, (2)checkout code, (3)setup java, (4)mvn clean package
     runs-on: ubuntu-latest
-    services:
-      postgres:
+    services: # Used for connection to database
+      postgres: # (1)setup postgresql
         image: postgres:13.1
         env:
           POSTGRES_DB: ${{ env.POSTGRESQL_DB }}
           POSTGRES_USER: ${{ env.POSTGRESQL_USER }}
           POSTGRES_PASSWORD: ${{ env.POSTGRESQL_PASSWORD }}
         ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+          - 5432:5432 # refers-> host port: container port
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5 # check the database health
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1.4.3
+      - uses: actions/checkout@v2 # (2)checkout code
+      - uses: actions/setup-java@v1.4.3 # (3)setup java
         with:
           java-version: ${{ env.JAVA_VERSION }}
-      - name: Maven Clean Package
-        run: |
+      - name: Maven Clean Package # (4)mvn clean package
+        run: | 
           ./mvnw --no-transfer-progress clean package -P build-frontend
