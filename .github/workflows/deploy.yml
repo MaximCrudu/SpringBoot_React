@@ -36,13 +36,13 @@ jobs:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
-      - uses: 8398a7/action-slack@v3 # (1) action which allows to send slack notifications
-        with: # parameters
-          status: ${{ job.status }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-          text: 'CICD ongoing... :eyes:'
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # comes from github secrets
+#      - uses: 8398a7/action-slack@v3 # (1) action which allows to send slack notifications
+#        with: # parameters
+#          status: ${{ job.status }}
+#          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+#          text: 'CICD ongoing... :eyes:'
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # comes from github secrets
 
       - uses: actions/checkout@v2 # (2) checkout the code in this runner
 
@@ -67,13 +67,13 @@ jobs:
             -P build-frontend \
             -P jib-push-to-dockerhub \
               -Dapp.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}}
-      - uses: 8398a7/action-slack@v3 # (8) slack notification
-        with:
-          status: ${{ job.status }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-          text: ':white_check_mark: pushed crudmax/springboot-react-fullstack:${{steps.build-number.outputs.BUILD_NUMBER}} to docker hub... https://hub.docker.com/repository/docker/crudmax/springboot-react-fullstack'
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # comes from github secrets
+#      - uses: 8398a7/action-slack@v3 # (8) slack notification
+#        with:
+#          status: ${{ job.status }}
+#          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+#          text: ':white_check_mark: pushed crudmax/springboot-react-fullstack:${{steps.build-number.outputs.BUILD_NUMBER}} to docker hub... https://hub.docker.com/repository/docker/crudmax/springboot-react-fullstack'
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # comes from github secrets
       - name: Update and commit app version in docker-compose.yaml # (9) Will commit automatically the changes on github
         run: |
           BUILD_NUMBER=${{steps.build-number.outputs.BUILD_NUMBER}}
@@ -86,13 +86,13 @@ jobs:
           git commit -m "new app version: ${BUILD_NUMBER}"
           git push
 
-      - uses: 8398a7/action-slack@v3 # (10) slack notification
-        with:
-          status: ${{ job.status }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-          text: ':elasticbeanstalk: :aws: Deployment started... :grimacing: :crossed_fingers:' # with emojis
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # comes from github secrets
+#      - uses: 8398a7/action-slack@v3 # (10) slack notification
+#        with:
+#          status: ${{ job.status }}
+#          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+#          text: ':elasticbeanstalk: :aws: Deployment started... :grimacing: :crossed_fingers:' # with emojis
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # comes from github secrets
       - name: Beanstalk Deploy # (11)
         uses: einaregilsson/beanstalk-deploy@ebe3476a4ce991d54336935e75e78dd9d86f9408
         with:
@@ -105,11 +105,11 @@ jobs:
           version_label: ${{ steps.build-number.outputs.BUILD_NUMBER }}
           version_description: Version ${{steps.build-number.outputs.BUILD_NUMBER}} deployed via github actions ${{ github.sha }}
           wait_for_deployment: 60
-      - uses: 8398a7/action-slack@v3 # (12)
-        with:
-          status: ${{ job.status }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-          text: ':tada: :arrow_right: http://springbootreactfullstack-env.eba-3imjbkem.eu-west-1.elasticbeanstalk.com' # URL of running AWS environment that gives access to the application
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+#      - uses: 8398a7/action-slack@v3 # (12)
+#        with:
+#          status: ${{ job.status }}
+#          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+#          text: ':tada: :arrow_right: http://springbootreactfullstack-env.eba-3imjbkem.eu-west-1.elasticbeanstalk.com' # URL of running AWS environment that gives access to the application
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         if: always() # if the build fails, this action will always trigger
