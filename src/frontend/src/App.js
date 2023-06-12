@@ -77,11 +77,11 @@ const ActionButtons = (student, callback) => {
     );
 }
 
-const EditButton = () => {
-    return (
-        <Radio.Button value="default">Edit</Radio.Button>
-    );
-}
+// const EditButton = () => {
+//     return (
+//         <Radio.Button value="default">Edit</Radio.Button>
+//     );
+// }
 
 const columns = fetchStudents => [
     {
