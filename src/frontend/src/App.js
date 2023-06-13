@@ -7,7 +7,7 @@ import {
     Table,
     Spin,
     Empty,
-    Button, Tag, Badge, Avatar, Radio, Popconfirm,
+    Button, Tag, Badge, Avatar, Radio, Popconfirm, Image, Divider,
 } from 'antd';
 import {
     DesktopOutlined,
@@ -234,7 +234,20 @@ function App() {
                     {renderStudents()}
                 </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>By Maxim ©2023</Footer>
+            <Footer style={{textAlign: 'center'}}>
+                <Image
+                    width={55}
+                    src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png"
+                />
+                <Divider>
+                    <a
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        href="https://www.linkedin.com/in/maxim-crudu/">
+                        My LinkedIn Account
+                    </a>
+                </Divider>
+            </Footer>
         </Layout>
     </Layout>
 }
