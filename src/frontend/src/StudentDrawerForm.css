@@ -1,0 +1,9 @@
+.update-button {
+    color: black;
+    background-color: yellowgreen;
+    margin: 0 10px;
+}
+
+.update-button:hover {
+    color: #c12127;
+}
