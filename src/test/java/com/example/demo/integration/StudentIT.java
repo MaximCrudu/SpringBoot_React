@@ -80,6 +80,41 @@ public class StudentIT {
     }
 
     @Test
+    void canRegister10NewStudents() throws Exception {
+        for(int i = 0; i < 10; i++) {
+            // given
+            String name = String.format(
+                    "%s %s",
+                    faker.name().firstName(),
+                    faker.name().lastName()
+            );
+            String email = String.format(
+                    "%s@%s",
+                    StringUtils.trimAllWhitespace(name.trim().toLowerCase()),
+                    faker.internet().domainName()
+            );
+            Gender gender = Gender.values()[new Random().nextInt(Gender.values().length)];
+            Student student = new Student(
+                    name,
+                    email,
+                    gender
+            );
+            // when
+            ResultActions resultActions = mockMvc
+                    .perform(post("/api/v1/students")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(student)));
+            // then
+            resultActions.andExpect(status().isOk());
+            // Check that the student is entered in the database
+            List<Student> students = studentRepository.findAll();
+            assertThat(students)
+                    .usingElementComparatorIgnoringFields("id")
+                    .contains(student);
+        }
+    }
+
+    @Test
     void canDeleteStudent() throws Exception {
         // given
         int totalStudents = (int) studentRepository.count();
@@ -98,7 +133,6 @@ public class StudentIT {
             boolean exists = studentRepository.existsById(id);
             assertThat(exists).isFalse();
         }
-
     }
 
     @Test
@@ -126,6 +160,7 @@ public class StudentIT {
                         .content(objectMapper.writeValueAsString(student)))
                 .andExpect(status().isOk());
 
+        // retrieve result data
         MvcResult getStudentsResult = mockMvc.perform(get("/api/v1/students")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -135,6 +170,7 @@ public class StudentIT {
                 .getResponse()
                 .getContentAsString();
 
+        // map the result string contentAsString into an array of objects
         List<Student> students = objectMapper.readValue(
                 contentAsString,
                 new TypeReference<>() {

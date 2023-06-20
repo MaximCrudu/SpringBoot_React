@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -24,6 +25,7 @@ public class StudentService {
             throw new BadRequestException(
                     "Email " + student.getEmail() + " is taken");
         }
+
         studentRepository.save(student);
     }
 
@@ -32,6 +34,22 @@ public class StudentService {
             throw new StudentNotFoundException(
                     "Student with id " + studentId + " does not exists");
         }
+
         studentRepository.deleteById(studentId);
+    }
+
+    public void updateStudent(Long studentId, Student student) {
+        Optional<Student> optionalStudent = studentRepository.findById(studentId);
+        if (optionalStudent.isEmpty()) {
+            throw new StudentNotFoundException(
+                    "Student with id " + studentId + " does not exist");
+        }
+
+        Student updatedStudent = optionalStudent.get();
+        updatedStudent.setName(student.getName());
+        updatedStudent.setEmail(student.getEmail());
+        updatedStudent.setGender(student.getGender());
+
+        studentRepository.save(updatedStudent);
     }
 }

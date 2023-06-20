@@ -21,6 +21,7 @@ public class StudentController {
      */
     @GetMapping
     public List<Student> getAllStudents() {
+
         return studentService.getAllStudents();
     }
 
@@ -32,6 +33,15 @@ public class StudentController {
     @DeleteMapping(path = "{studentId}")
     public void deleteStudent(
             @PathVariable("studentId") Long studentId) {
+
         studentService.deleteStudent(studentId);
+    }
+
+    @PutMapping(path = "{studentId}")
+    public void updateStudent(
+            @PathVariable("studentId") Long studentId,
+            @Valid @RequestBody Student student) {
+
+        studentService.updateStudent(studentId, student);
     }
 }
