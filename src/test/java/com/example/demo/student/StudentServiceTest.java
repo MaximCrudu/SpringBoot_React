@@ -3,12 +3,14 @@ package com.example.demo.student;
 import com.example.demo.student.exception.BadRequestException;
 import com.example.demo.student.exception.StudentNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.BDDMockito;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -123,9 +125,63 @@ class StudentServiceTest {
         // then
         assertThatThrownBy(() -> underTest.deleteStudent(id))
                 .isInstanceOf(StudentNotFoundException.class)
-                .hasMessageContaining("Student with id " + id + " does not exists");
+                .hasMessageContaining("Student with id " + id + " does not exist");
 
         // to ensure that nothing will be deleted by the mock after throwing an error
         verify(studentRepository, never()).deleteById(any());
+    }
+
+    @Test
+    void shouldUpdateStudent() {
+        // given
+        Student newStudentData = new Student(
+                "Leo",
+                "leo@maileo.com",
+                Gender.MALE
+        );
+        long id = 4;
+
+        // set mock studentRepository to return valid Optional student from calls on findById method
+        BDDMockito.BDDMyOngoingStubbing<Optional<Student>> optionalStudent = given(studentRepository.findById(id))
+                .willReturn(Optional.of(newStudentData));
+
+        // when
+        underTest.updateStudent(id,newStudentData);
+
+        // then
+        // prepare argument capture
+        ArgumentCaptor<Student> studentArgumentCaptor =
+                ArgumentCaptor.forClass(Student.class);
+
+        // verify if the repository was invoked using the save() method
+        // and capture the value of the transmitted Student object
+        verify(studentRepository)
+                .save(studentArgumentCaptor.capture());
+
+        Student captureStudent = studentArgumentCaptor.getValue();
+
+        // check if studentRepository was invoked with the same object that was passed in StudentService underTest
+        assertThat(captureStudent).isEqualTo(newStudentData);
+    }
+
+    @Test
+    void shouldThrowWhenUpdateStudentNotFound() {
+        // given
+        Student newStudentData = new Student(
+                "Mike",
+                "mike@mac.com",
+                Gender.MALE
+        );
+        long id = 5;
+        given(studentRepository.findById(id))
+                .willReturn(Optional.empty());
+
+        // then
+        assertThatThrownBy(() -> underTest.updateStudent(id, newStudentData))
+                .isInstanceOf(StudentNotFoundException.class)
+                .hasMessageContaining("Student with id " + id + " does not exist");
+
+        // to ensure that nothing will be saved by the mock after throwing an error
+        verify(studentRepository, never()).save(any());
     }
 }

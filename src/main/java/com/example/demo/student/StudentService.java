@@ -32,7 +32,7 @@ public class StudentService {
     public void deleteStudent(Long studentId) {
         if (!studentRepository.existsById(studentId)) {
             throw new StudentNotFoundException(
-                    "Student with id " + studentId + " does not exists");
+                    "Student with id " + studentId + " does not exist");
         }
 
         studentRepository.deleteById(studentId);
