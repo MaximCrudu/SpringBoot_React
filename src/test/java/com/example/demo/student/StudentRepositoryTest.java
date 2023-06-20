@@ -21,7 +21,7 @@ class StudentRepositoryTest {
     /**
      * In order to avoid introducing the entities created for tests
      * into the persistent database, we will have to work with
-     * H2 in memory database.
+     * H2 in memory database. It's configured in application.properties file in java test folder
      * */
     @Test
     void shouldTestIfStudentExistsEmail() {
