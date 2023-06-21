@@ -43,3 +43,9 @@
     transform: rotate(360deg);
   }
 }
+
+.random-avatar-color {
+  color: #000c17;
+  font-weight: bold;
+  text-shadow: 0 0 5px #cccccc;
+}

@@ -35,16 +35,28 @@ import { errorNotification, successNotification } from "./Notification";
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
+const getRandomHue = (name) => {
+    // The nameHash will contain the sum of the character codes of all the characters in the name string
+    const nameHash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return nameHash % 360; // Generate a random hue value based on the name
+};
+
 const TheAvatar = ({ name }) => {
     let trim = name.trim();
     if (trim.length === 0) {
         return <Avatar icon={<UserOutlined />} />;
     }
     const split = trim.split(" ");
-    if (split.length === 1) {
-        return <Avatar>{name.charAt(0)}</Avatar>;
-    }
-    return <Avatar>{`${name.charAt(0)}${name.charAt(name.length - 1)}`}</Avatar>;
+    const randomHue = getRandomHue(name);
+
+    return (
+        <Avatar
+            className="random-avatar-color"
+            style={{ backgroundColor: `hsl(${randomHue}, 80%, 80%)` }}
+        >
+            {split.length === 1 ? name.charAt(0) : `${name.charAt(0)}${name.charAt(name.length - 1)}`}
+        </Avatar>
+    );
 };
 
 const ActionButtons = (student, callback, showDrawer, setShowDrawer, setSelectedStudent) => {
