@@ -64,7 +64,7 @@ const ActionButtons = (student, callback, showDrawer, setShowDrawer, setSelected
         deleteStudent(student.id).then(() => {
             successNotification(
                 "Student deleted",
-                `Student ${student.name} with Id: ${student.id} was deleted`
+                `Student ${student.name} was deleted`
             );
             callback();
         }).catch(err => {
@@ -116,11 +116,6 @@ const columns = (fetchStudents, showDrawer, setShowDrawer, setSelectedStudent) =
         dataIndex: 'avatar',
         key: 'avatar',
         render: (text, student) => <TheAvatar name={student.name} />
-    },
-    {
-        title: 'Id',
-        dataIndex: 'id',
-        key: 'id'
     },
     {
         title: 'Name',

@@ -36,10 +36,10 @@ public class Student {
             generator = "student_sequence",
             strategy = GenerationType.SEQUENCE)
     private Long id;
-    @NotBlank
+    @NotBlank(message = "The name must not be blank.")
     @Column(nullable = false) // database constraint
     private String name;
-    @Email  // can be customized with a regular expression
+    @Email(message = "The email format is invalid, try something like: aaa@bbb.ccc")  // can be customized with a regular expression
     @Column(nullable = false, unique = true)
     private String email;
     @NotNull
