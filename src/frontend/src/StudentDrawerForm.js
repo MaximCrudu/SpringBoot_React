@@ -45,7 +45,8 @@ function StudentDrawerForm({showDrawer, setShowDrawer, fetchStudents, selectedSt
                 onClose();
                 successNotification(
                     "Student edited",
-                    `Student ${student.name} with Id: ${id} was edited`
+                    `Student ${student.name} was edited`,
+
                 );
                 fetchStudents();
             }).catch(err => {
@@ -74,8 +75,7 @@ function StudentDrawerForm({showDrawer, setShowDrawer, fetchStudents, selectedSt
             err.response.json().then(res => {
                 errorNotification(
                     "There was an issue",
-                    `${res.message} [${res.status}] [${res.error}]`,
-                    "bottomLeft"
+                    `${res.message} [${res.status}] [${res.error}]`
                 )
             });
         }).finally(() => {
@@ -92,8 +92,9 @@ function StudentDrawerForm({showDrawer, setShowDrawer, fetchStudents, selectedSt
     };
 
     const onFinishFailed = errorInfo => {
-        alert(JSON.stringify(errorInfo, null, 2));
+        errorNotification("Validation Error", "Please complete the fields");
     };
+
 
     // Set initial form values if a student is selected
     const initialValues = selectedStudent
