@@ -2,7 +2,6 @@ package com.example.demo.student;
 
 import lombok.AllArgsConstructor;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.student.exception.BadRequestException;
 
@@ -30,7 +29,9 @@ public class StudentController {
 
     @PostMapping
     public void addStudent(@Valid @RequestBody Student student, BindingResult bindingResult) {
-        validateAndThrowBadRequest(bindingResult);
+        if (bindingResult.hasErrors()) {
+            throw new BadRequestException(bindingResult);
+        }
 
         studentService.addStudent(student);
     }
@@ -46,18 +47,10 @@ public class StudentController {
     public void updateStudent(
             @PathVariable("studentId") Long studentId,
             @Valid @RequestBody Student student, BindingResult bindingResult) {
-        validateAndThrowBadRequest(bindingResult);
+        if (bindingResult.hasErrors()) {
+            throw new BadRequestException(bindingResult);
+        }
 
         studentService.updateStudent(studentId, student);
-    }
-
-    private void validateAndThrowBadRequest(BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            StringBuilder errorMessage = new StringBuilder();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errorMessage.append(error.getDefaultMessage()).append("\n");
-            }
-            throw new BadRequestException(errorMessage.toString());
-        }
     }
 }
