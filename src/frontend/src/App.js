@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getAllStudents, deleteStudent } from "./client";
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import {
     Layout,
     Menu,
@@ -146,6 +146,23 @@ function App() {
     const [fetching, setFetching] = useState(true);
     const [showDrawer, setShowDrawer] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
+    const [activeKey, setActiveKey] = useState(null);
+
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        fetchStudents();
+    }, []); // zero dependencies
+
+    useEffect(() => {
+        setActiveKey(location.pathname);
+    }, [location.pathname]);
+
+    const handleNavigation = (path) => {
+        setActiveKey(path);
+        navigate(path);
+    };
 
     const fetchStudents = () =>
         getAllStudents()
@@ -160,10 +177,6 @@ function App() {
                 );
             });
         }).finally(() => setFetching(false));
-
-    useEffect(() => {
-        fetchStudents();
-    }, []); // zero dependencies
 
     const AboutProject = () => {
         return <h1>About Project</h1>;
@@ -233,45 +246,43 @@ function App() {
     };
 
     return (
-        <Router>
-            <Layout style={{ minHeight: '100vh' }}>
-                <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed}>
-                    <div className="logo" />
-                    <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-                        <Menu.Item key="1" icon={<PieChartOutlined />}>
-                            <Link to="/">Students tab</Link>
-                        </Menu.Item>
-                        <Menu.Item key="2" icon={<DesktopOutlined />}>
-                            <Link to="/about-project">About project</Link>
-                        </Menu.Item>
-                    </Menu>
-                </Sider>
-                <Layout className="site-layout">
-                    <Header className="site-layout-background" style={{ padding: 0 }} />
-                    <Content style={{ margin: '0 16px' }}>
-                        <Routes>
-                            <Route path="/" element={renderStudents()} />
-                            <Route path="/about-project" element={<AboutProject />} />
-                        </Routes>
-                    </Content>
-                    <Footer style={{ textAlign: 'center' }}>
-                        <Image
-                            width={55}
-                            src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png"
-                        />
-                        <Divider>
-                            <a
-                                rel="noopener noreferrer"
-                                target="_blank"
-                                href="https://www.linkedin.com/in/maxim-crudu/"
-                            >
-                                My LinkedIn Account
-                            </a>
-                        </Divider>
-                    </Footer>
-                </Layout>
+        <Layout style={{ minHeight: '100vh' }}>
+            <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed}>
+                <div className="logo" />
+                <Menu theme="dark" selectedKeys={[activeKey]} mode="inline">
+                    <Menu.Item key="/" icon={<PieChartOutlined />} onClick={() => handleNavigation("/")}>
+                        Students tab
+                    </Menu.Item>
+                    <Menu.Item key="/about-project" icon={<DesktopOutlined />} onClick={() => handleNavigation("/about-project")}>
+                        About project
+                    </Menu.Item>
+                </Menu>
+            </Sider>
+            <Layout className="site-layout">
+                <Header className="site-layout-background" style={{ padding: 0 }} />
+                <Content style={{ margin: '0 16px' }}>
+                    <Routes>
+                        <Route path="/" element={renderStudents()} />
+                        <Route path="/about-project" element={<AboutProject />} />
+                    </Routes>
+                </Content>
+                <Footer style={{ textAlign: 'center' }}>
+                    <Image
+                        width={55}
+                        src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png"
+                    />
+                    <Divider>
+                        <a
+                            rel="noopener noreferrer"
+                            target="_blank"
+                            href="https://www.linkedin.com/in/maxim-crudu/"
+                        >
+                            My LinkedIn Account
+                        </a>
+                    </Divider>
+                </Footer>
             </Layout>
-        </Router>
+        </Layout>
     );
 }
 
