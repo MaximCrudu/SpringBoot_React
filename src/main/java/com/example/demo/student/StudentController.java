@@ -53,4 +53,10 @@ public class StudentController {
 
         studentService.updateStudent(studentId, student);
     }
+
+    @GetMapping("/about-project")
+    public String getAboutProject() {
+
+        return "About Project Page";
+    }
 }
