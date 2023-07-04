@@ -95,7 +95,6 @@ function StudentDrawerForm({showDrawer, setShowDrawer, fetchStudents, selectedSt
         errorNotification("Validation Error", "Please complete the fields");
     };
 
-
     // Set initial form values if a student is selected
     const initialValues = selectedStudent
         ? {
