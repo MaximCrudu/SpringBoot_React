@@ -252,7 +252,7 @@ function App() {
                     <Menu.Item key="/" icon={<PieChartOutlined />} onClick={() => handleNavigation("/")}>
                         Students tab
                     </Menu.Item>
-                    <Menu.Item key="/about-project" icon={<DesktopOutlined />} onClick={() => handleNavigation(`${infoPath}`)}>
+                    <Menu.Item key="/about-project" icon={<DesktopOutlined />} onClick={() => handleNavigation(`/${infoPath}`)}>
                         About the project
                     </Menu.Item>
                 </Menu>
