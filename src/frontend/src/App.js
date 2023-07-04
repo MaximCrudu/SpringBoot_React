@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAllStudents, deleteStudent, getInfoAboutProject } from "./client";
+import { getAllStudents, deleteStudent } from "./client";
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import {
     Layout,
@@ -26,6 +26,7 @@ import {
 } from "@ant-design/icons";
 
 import StudentDrawerForm from "./StudentDrawerForm";
+import AboutProject from './AboutProject';
 
 import "./App.css";
 import { errorNotification, successNotification } from "./Notification";
@@ -140,6 +141,8 @@ const columns = (fetchStudents, showDrawer, setShowDrawer, setSelectedStudent) =
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
+const infoPath = 'about-project';
+
 function App() {
     const [students, setStudents] = useState([]);
     const [collapsed, setCollapsed] = useState(false);
@@ -177,38 +180,6 @@ function App() {
                 );
             });
         }).finally(() => setFetching(false));
-
-    const AboutProject = () => {
-
-        useEffect(() => {
-            getInfoAboutProject();
-        }, []);
-
-        return (
-            <div>
-                <br/>
-                <h1>
-                    You can find the source code and more information
-                    on my {' '}
-                    <a
-                        rel="noopener noreferrer"
-                        target="_blank" href="https://github.com/MaximCrudu/SpringBoot_React/blob/main/README.md"
-                    >
-                        GitHub Repository
-                    </a>
-                </h1>
-                <div>
-                    <br/><br/>
-                    <h1>Project Diagram:</h1>
-                    <Image
-                        src="/images/project_diagram.jpg"
-                        alt="Project Diagram"
-                        style={{ width: '100%', maxWidth: '500px' }}
-                    />
-                </div>
-            </div>
-        );
-    };
 
     const renderStudents = () => {
         const columnsConfig = columns(fetchStudents, showDrawer, setShowDrawer, setSelectedStudent);
@@ -281,7 +252,7 @@ function App() {
                     <Menu.Item key="/" icon={<PieChartOutlined />} onClick={() => handleNavigation("/")}>
                         Students tab
                     </Menu.Item>
-                    <Menu.Item key="/about-project" icon={<DesktopOutlined />} onClick={() => handleNavigation("/about-project")}>
+                    <Menu.Item key="/about-project" icon={<DesktopOutlined />} onClick={() => handleNavigation(`${infoPath}`)}>
                         About the project
                     </Menu.Item>
                 </Menu>
@@ -291,7 +262,7 @@ function App() {
                 <Content style={{ margin: '0 16px' }}>
                     <Routes>
                         <Route path="/" element={renderStudents()} />
-                        <Route path="/about-project" element={<AboutProject />} />
+                        <Route path="/about-project" element={<AboutProject infoPath={`${infoPath}`} />} />
                     </Routes>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
