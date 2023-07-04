@@ -6,22 +6,18 @@ const AboutProject = ({ infoPath }) => {
     const [projectDiagramUrl, setProjectDiagramUrl] = useState('');
 
     useEffect(() => {
+        const fetchData = () => {
+            getInfoAboutProject(infoPath)
+                .then(response => {
+                    setProjectDiagramUrl(response);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        };
+
         fetchData();
-    }, []);
-
-    useEffect(() => {
-    }, [projectDiagramUrl]);
-
-    const fetchData = () => {
-        getInfoAboutProject(infoPath)
-            .then(response => {
-                setProjectDiagramUrl(response);
-            })
-            .catch(error => {
-                // Handle the error here
-                console.error(error);
-            });
-    };
+    }, [infoPath]);
 
     return (
         <div>

@@ -252,7 +252,7 @@ function App() {
                     <Menu.Item key="/" icon={<PieChartOutlined />} onClick={() => handleNavigation("/")}>
                         Students tab
                     </Menu.Item>
-                    <Menu.Item key="/about-project" icon={<DesktopOutlined />} onClick={() => handleNavigation(`/${infoPath}`)}>
+                    <Menu.Item key="/about-project" icon={<DesktopOutlined />} onClick={() => handleNavigation(`${infoPath}`)}>
                         About the project
                     </Menu.Item>
                 </Menu>
@@ -262,7 +262,7 @@ function App() {
                 <Content style={{ margin: '0 16px' }}>
                     <Routes>
                         <Route path="/" element={renderStudents()} />
-                        <Route path="/about-project" element={<AboutProject infoPath={`/${infoPath}`} />} />
+                        <Route path="/about-project" element={<AboutProject infoPath={`${infoPath}`} />} />
                     </Routes>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
