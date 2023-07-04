@@ -36,7 +36,7 @@ export const updateStudent = (studentId, student) =>
         body: JSON.stringify(student)
     }).then(checkStatus);
 
-export const getInfoAboutProject = () =>
-    fetch("api/v1/about-project")
+export const getInfoAboutProject = (infoPath) =>
+    fetch(`api/v1/${infoPath}`)
         .then(checkStatus)
-        .then(response => response.text());
+        .then(response => response.url);
