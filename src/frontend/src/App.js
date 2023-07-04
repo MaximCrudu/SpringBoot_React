@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAllStudents, deleteStudent } from "./client";
+import { getAllStudents, deleteStudent, getInfoAboutProject } from "./client";
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import {
     Layout,
@@ -179,6 +179,11 @@ function App() {
         }).finally(() => setFetching(false));
 
     const AboutProject = () => {
+
+        useEffect(() => {
+            getInfoAboutProject();
+        }, []);
+
         return (
             <div>
                 <br/>

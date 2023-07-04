@@ -35,3 +35,8 @@ export const updateStudent = (studentId, student) =>
         method: 'PUT',
         body: JSON.stringify(student)
     }).then(checkStatus);
+
+export const getInfoAboutProject = () =>
+    fetch("api/v1/about-project")
+        .then(checkStatus)
+        .then(response => response.text());

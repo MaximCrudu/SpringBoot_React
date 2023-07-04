@@ -5,7 +5,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.student.exception.BadRequestException;
 
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -52,11 +51,5 @@ public class StudentController {
         }
 
         studentService.updateStudent(studentId, student);
-    }
-
-    @GetMapping("/about-project")
-    public String getAboutProject() {
-
-        return "About Project Page";
     }
 }
