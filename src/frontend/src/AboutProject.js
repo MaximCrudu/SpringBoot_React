@@ -7,7 +7,7 @@ const AboutProject = ({ infoPath }) => {
 
     useEffect(() => {
         fetchData();
-    });
+    }, []);
 
     useEffect(() => {
     }, [projectDiagramUrl]);
