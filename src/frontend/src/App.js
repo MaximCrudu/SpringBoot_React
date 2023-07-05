@@ -74,6 +74,7 @@ const ActionButtons = (student, callback, showDrawer, setShowDrawer, setSelected
             });
         });
     };
+
     const editStudent = (student, setSelectedStudent) => {
         setSelectedStudent(student);
         setShowDrawer(!showDrawer);
